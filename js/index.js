@@ -47,8 +47,8 @@ itemForm.addEventListener('submit', function(event){
 //function for add list
 function addTodos(param) {
 	//create elem
-	const li 	= document.createElement('li');
-	const h5  	= document.createElement('label');
+	const li 	 = document.createElement('li');
+	const h5  	 = document.createElement('label');
 	const date       = document.createElement('label');
 	const divButtons = document.createElement('div');
 	const fasCheck 	 = document.createElement('i');
@@ -130,8 +130,8 @@ function update(){
 		myNode.removeChild(myNode.firstChild);
 	}
 	for (var i = 0; i < itemArr.length; i++){
-		const li 	= document.createElement('li');
-		const h5  	= document.createElement('label');
+		const li 	 = document.createElement('li');
+		const h5  	 = document.createElement('label');
 		const date       = document.createElement('label');
 		const divButtons = document.createElement('div');
 		const fasCheck 	 = document.createElement('i');
@@ -190,8 +190,8 @@ function sortingcancel(param){
 		myNode.removeChild(myNode.firstChild);
 	}
 	for (var i = 0; i < itemArr.length; i++){
-		const li 	= document.createElement('li');
-		const h5  	= document.createElement('label');
+		const li 	 = document.createElement('li');
+		const h5  	 = document.createElement('label');
 		const date       = document.createElement('label');
 		const divButtons = document.createElement('div');
 		const fasCheck 	 = document.createElement('i');
