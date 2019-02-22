@@ -173,9 +173,6 @@ function update(param){
 						itemArr.splice(0, item);
 					});
 
-					console.log(itemArr[i]);
-					
-
 					localStorage.setItem('list', JSON.stringify(itemArr[i]));
 				});
 			}
