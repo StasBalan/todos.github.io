@@ -103,9 +103,10 @@ function buttonsItem(param) {
 itemClear.addEventListener('click', function(){
 	localStorage.removeItem('list');
 
-	if (itemList.querySelectorAll('li').length > 0){
+	if (itemArr.length > 0){
 		itemList.querySelectorAll('li').forEach(function(item){
 			itemList.removeChild(item);
+			itemArr.splice(0, itemArr.length);
 		});
 	}	
 }); 
