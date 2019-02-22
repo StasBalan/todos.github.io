@@ -124,7 +124,7 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 	});
 });
 
-function update(){
+function update(param){
 	const myNode = document.getElementById("todo__list");
 	while(myNode.firstChild){
 		myNode.removeChild(myNode.firstChild);
@@ -137,26 +137,53 @@ function update(){
 		const fasCheck 	 = document.createElement('i');
 		const fasDltBtn  = document.createElement('i');
 
-	//assign classes
-	li.classList.add('item', 'd-flex');
-	li.id = itemArr[i].id;
-	h5.classList.add('item-name');
-	date.id = 'date';
-	divButtons.classList.add('item-buttons');
-	fasCheck.classList.add('fas', 'fa-check', 'complete');
-	fasDltBtn.classList.add('fas', 'fa-trash', 'delete');
+		//assign classes
+		li.classList.add('item', 'd-flex');
+		li.id = itemArr[i].id;
+		h5.classList.add('item-name');
+		date.id = 'date';
+		divButtons.classList.add('item-buttons');
+		fasCheck.classList.add('fas', 'fa-check', 'complete');
+		fasDltBtn.classList.add('fas', 'fa-trash', 'delete');
 
-	//assing children
-	itemList.appendChild(li);
-	li.appendChild(h5);
-	li.appendChild(date);
-	li.appendChild(divButtons);
-	divButtons.appendChild(fasCheck);
-	divButtons.appendChild(fasDltBtn);
+		//assing children
+		itemList.appendChild(li);
+		li.appendChild(h5);
+		li.appendChild(date);
+		li.appendChild(divButtons);
+		divButtons.appendChild(fasCheck);
+		divButtons.appendChild(fasDltBtn);
 
-	h5.innerText   = itemArr[i].text;
-	date.innerText = itemArr[i].date;
-}
+		h5.innerText   = itemArr[i].text;
+		date.innerText = itemArr[i].date;
+
+		const items = itemList.querySelectorAll('.item');
+
+		items.forEach(function(item){
+			if(item.id === itemArr[i].id) {
+				item.querySelector('.complete').addEventListener('click', function(){
+					item.querySelector('.item-name').classList.toggle('fill');
+					item.querySelector('#date').classList.toggle('fill');
+				});
+
+				item.querySelector('.delete').addEventListener('click', function(){
+					this.closest('li').remove();
+
+					itemArr[i] = itemArr.filter(function(item){
+						itemArr.splice(0, item);
+					});
+
+					console.log(itemArr[i]);
+					
+
+					localStorage.setItem('list', JSON.stringify(itemArr[i]));
+				});
+			}
+		});
+	}
+
+	
+	
 }
 
 //function sorting date
@@ -165,7 +192,7 @@ function sorting123(param){
 		const dateA = new Date (a.date), dateB = new Date(b.date);
 		return dateA - dateB;		
 	});
-	update();
+	update(param);
 }
 
 //function sorting letters
@@ -180,7 +207,7 @@ function sortingabc(param){
 		}
 		return 0;
 	});	
-	update();
+	update(param);
 }
 
 //function cancel sorting
@@ -197,26 +224,26 @@ function sortingcancel(param){
 		const fasCheck 	 = document.createElement('i');
 		const fasDltBtn  = document.createElement('i');
 
-	//assing classes
-	li.classList.add('item', 'd-flex');
-	li.id = itemArr2[i].id;
-	h5.classList.add('item-name');
-	date.id = 'date';
-	divButtons.classList.add('item-buttons');
-	fasCheck.classList.add('fas', 'fa-check', 'complete');
-	fasDltBtn.classList.add('fas', 'fa-trash', 'delete');
+		//assing classes
+		li.classList.add('item', 'd-flex');
+		li.id = itemArr2[i].id;
+		h5.classList.add('item-name');
+		date.id = 'date';
+		divButtons.classList.add('item-buttons');
+		fasCheck.classList.add('fas', 'fa-check', 'complete');
+		fasDltBtn.classList.add('fas', 'fa-trash', 'delete');
 
-	//assing children
-	itemList.appendChild(li);
-	li.appendChild(h5);
-	li.appendChild(date);
-	li.appendChild(divButtons);
-	divButtons.appendChild(fasCheck);
-	divButtons.appendChild(fasDltBtn);
+		//assing children
+		itemList.appendChild(li);
+		li.appendChild(h5);
+		li.appendChild(date);
+		li.appendChild(divButtons);
+		divButtons.appendChild(fasCheck);
+		divButtons.appendChild(fasDltBtn);
 
-	h5.innerText   = itemArr2[i].text;
-	date.innerText = itemArr2[i].date;
-}
+		h5.innerText   = itemArr2[i].text;
+		date.innerText = itemArr2[i].date;
+	}
 }
 
 //buttons for sorting
