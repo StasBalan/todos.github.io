@@ -7,8 +7,10 @@ const btnAdd    = document.getElementById('btn');
 const itemClear = document.getElementById('btn1');
 const itemList  = document.getElementById('todo__list');
 
-var itemArr  = [];
-var itemArr2 = [];
+
+
+const itemArr  = [];
+const itemArr2 = [];
 
 itemForm.addEventListener('submit', function(event){
 	event.preventDefault();
@@ -21,6 +23,8 @@ itemForm.addEventListener('submit', function(event){
 		date: dateValue,
 		id: Math.random().toString(36).slice(2)
 	};
+	
+
 	//--------------------
 
 	if (textValue === '') {
@@ -39,10 +43,18 @@ itemForm.addEventListener('submit', function(event){
 		itemArr2.push(param);
 		itemArr.push(param);
 		buttonsItem(param);
-		//localStorage
-		localStorage.setItem('list', JSON.stringify(itemArr));
 	}
 });
+						//localStorage
+							var todos;
+							function toLocal() {
+								todos = itemList.innerHTML;
+								localStorage.setItem('todos', todos);	
+							}
+
+							if(localStorage.getItem('todos')) {
+								itemList.innerHTML = localStorage.getItem('todos');
+							}
 
 //function for add list
 function addTodos(param) {
@@ -73,27 +85,28 @@ function addTodos(param) {
 
 	h5.innerText   = input.value;
 	date.innerText = inputDate.value;
+
+	toLocal();
 }
 
 //function for buttons
 function buttonsItem(param) {
 	const items = itemList.querySelectorAll('.item');
-
 	items.forEach(function(item){
 		if(item.id === param.id) {
 			item.querySelector('.complete').addEventListener('click', function(){
 				item.querySelector('.item-name').classList.toggle('fill');
 				item.querySelector('#date').classList.toggle('fill');
+				toLocal();
 			});
 
 			item.querySelector('.delete').addEventListener('click', function(){
-				this.closest('li').remove();
-
-				itemArr = itemArr.filter(function(item){
+				//this.closest('li').remove();
+				itemList.removeChild(item);
+				itemArr.filter(function(item){
 					return item !== param;
 				});
-
-				localStorage.setItem('list', JSON.stringify(itemArr));
+				toLocal();
 			});
 		}
 	});
@@ -101,7 +114,7 @@ function buttonsItem(param) {
 
 //Delete all list
 itemClear.addEventListener('click', function(){
-	localStorage.removeItem('list');
+	localStorage.removeItem('todos');
 
 	if (itemArr.length > 0){
 		itemList.querySelectorAll('li').forEach(function(item){
@@ -123,6 +136,21 @@ document.getElementById('search-input').addEventListener('keyup', function(event
 		}
 	});
 });
+
+//function filter date 
+document.getElementById('go').addEventListener('click', function(ev){
+	const inputDatee = document.getElementById('search-date');
+	const date = inputDatee.value;
+	document.querySelectorAll('li').forEach(function(tassk){
+		const itemD = tassk.textContent;
+		if(itemD.indexOf(date) != -1) {
+			tassk.style.display = 'flex';
+		}else {
+			tassk.style.display = 'none';
+		}
+	});
+});
+
 
 function update(param){
 	const myNode = document.getElementById("todo__list");
@@ -172,28 +200,22 @@ function update(param){
 					itemArr[i] = itemArr.filter(function(item){
 						itemArr.splice(0, item);
 					});
-
-					localStorage.setItem('list', JSON.stringify(itemArr[i]));
 				});
 			}
 		});
-	}
-
-	
-	
+	}	
 }
 
 //function sorting date
-function sorting123(param){ 
+function sortingNumb(param){ 
 	itemArr.sort(function(a, b){
-		const dateA = new Date (a.date), dateB = new Date(b.date);
-		return dateA - dateB;		
+		return new Date (a.date) - new Date(b.date);		
 	});
 	update(param);
 }
 
 //function sorting letters
-function sortingabc(param){
+function sortingAbc(param){
 	itemArr.sort(function(a, b){
 		const textA = a.text.toLowerCase(), textB = b.text.toLowerCase();
 		if (textA < textB){
@@ -208,7 +230,7 @@ function sortingabc(param){
 }
 
 //function cancel sorting
-function sortingcancel(param){ 
+function sortingCancel(param){ 
 	const myNode = document.getElementById("todo__list");
 	while(myNode.firstChild){
 		myNode.removeChild(myNode.firstChild);
@@ -240,10 +262,29 @@ function sortingcancel(param){
 
 		h5.innerText   = itemArr2[i].text;
 		date.innerText = itemArr2[i].date;
+
+		const items = itemList.querySelectorAll('.item');
+
+		items.forEach(function(item){
+			if(item.id === itemArr2[i].id) {
+				item.querySelector('.complete').addEventListener('click', function(){
+					item.querySelector('.item-name').classList.toggle('fill');
+					item.querySelector('#date').classList.toggle('fill');
+				});
+
+				item.querySelector('.delete').addEventListener('click', function(){
+					this.closest('li').remove();
+
+					itemArr2[i] = itemArr.filter(function(item){
+						itemArr.splice(0, item);
+					});
+				});
+			}
+		});
 	}
 }
 
 //buttons for sorting
-document.getElementById('sorting-123').addEventListener('click', sorting123);
-document.getElementById('sorting-abc').addEventListener('click', sortingabc);
-document.getElementById('sorting-cancel').addEventListener('click', sortingcancel);
+document.getElementById('sorting-123').addEventListener('click', sortingNumb);
+document.getElementById('sorting-abc').addEventListener('click', sortingAbc);
+document.getElementById('sorting-cancel').addEventListener('click', sortingCancel);

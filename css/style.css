@@ -99,7 +99,7 @@ input[type='date'] {
 	outline: none;
 }
 
-#btn, #btn1, #sorting-abc, #sorting-123, #sorting-cancel {
+#btn, #btn1, #sorting-abc, #sorting-123, #sorting-cancel, .searchDate {
 	background-color: #3498db;
 	border: none;
 	border-radius: 10px;
@@ -141,7 +141,7 @@ input[type='date'] {
     margin-left: 10px;
 }
 
-#search-input {
+#search-input, #search-date {
 	margin-top: 20px;
 	border-radius: 0;
 	border: 0;
@@ -197,4 +197,12 @@ input[type='date'] {
 
 .fas {
 	padding-left: 5px;
+}
+
+.searchDate {
+	background-color: #f1c40f;
+}
+
+.searchDate:hover {
+	background-color: #f39c12;
 }
