@@ -6,11 +6,34 @@ const inputDate = document.getElementById('todo__date');
 const btnAdd    = document.getElementById('btn');
 const itemClear = document.getElementById('btn1');
 const itemList  = document.getElementById('todo__list');
+const lsArr = JSON.parse(localStorage.getItem('myTaskList'));
 
 
 
 const itemArr  = [];
 const itemArr2 = [];
+	
+(function(){
+	if(localStorage.getItem('myTaskList')){
+		lsArr.forEach(function(item, index){
+			itemArr.push(lsArr[index]);
+			itemList.innerHTML = localStorage.getItem('myTaskList');
+			
+		});
+
+		itemList.addEventListener('click', buttonsItem);
+	}
+})();
+
+	/*var todos;
+	function toLocal(param) {
+		todos = itemList.innerHTML;
+		localStorage.setItem('todos', todos);
+	}
+
+	if(localStorage.getItem('todos')) {
+		itemmList.innerHTML = localStorage.getItem('todos');
+	}*/
 
 itemForm.addEventListener('submit', function(event){
 	event.preventDefault();
@@ -23,7 +46,8 @@ itemForm.addEventListener('submit', function(event){
 		date: dateValue,
 		id: Math.random().toString(36).slice(2)
 	};
-	
+
+
 
 	//--------------------
 
@@ -43,18 +67,12 @@ itemForm.addEventListener('submit', function(event){
 		itemArr2.push(param);
 		itemArr.push(param);
 		buttonsItem(param);
+		localStorage.setItem('myTaskList',JSON.stringify(itemArr));
+
 	}
 });
 						//localStorage
-							var todos;
-							function toLocal() {
-								todos = itemList.innerHTML;
-								localStorage.setItem('todos', todos);	
-							}
-
-							if(localStorage.getItem('todos')) {
-								itemList.innerHTML = localStorage.getItem('todos');
-							}
+		
 
 //function for add list
 function addTodos(param) {
@@ -86,7 +104,8 @@ function addTodos(param) {
 	h5.innerText   = input.value;
 	date.innerText = inputDate.value;
 
-	toLocal();
+	//toLocal();
+	localStorage.setItem('myTaskList', JSON.stringify(itemArr));
 }
 
 //function for buttons
@@ -97,16 +116,19 @@ function buttonsItem(param) {
 			item.querySelector('.complete').addEventListener('click', function(){
 				item.querySelector('.item-name').classList.toggle('fill');
 				item.querySelector('#date').classList.toggle('fill');
-				toLocal();
+				//toLocal();
+					localStorage.setItem('myTaskList', JSON.stringify(itemArr));
+
 			});
 
 			item.querySelector('.delete').addEventListener('click', function(){
-				//this.closest('li').remove();
 				itemList.removeChild(item);
 				itemArr.filter(function(item){
 					return item !== param;
 				});
-				toLocal();
+				//toLocal();
+					localStorage.setItem('myTaskList', JSON.stringify(itemArr));
+
 			});
 		}
 	});
@@ -114,7 +136,7 @@ function buttonsItem(param) {
 
 //Delete all list
 itemClear.addEventListener('click', function(){
-	localStorage.removeItem('todos');
+	//localStorage.removeItem('myTaskList');
 
 	if (itemArr.length > 0){
 		itemList.querySelectorAll('li').forEach(function(item){
@@ -125,7 +147,7 @@ itemClear.addEventListener('click', function(){
 }); 
 
 //function filter 
-document.getElementById('search-input').addEventListener('keyup', function(event){
+document.getElementById('go').addEventListener('click', function(event){
 	const text = event.target.value;
 	document.querySelectorAll('li').forEach(function(task){
 		const item = task.textContent;
