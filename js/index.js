@@ -9,31 +9,65 @@ const itemList  = document.getElementById('todo__list');
 const lsArr = JSON.parse(localStorage.getItem('myTaskList'));
 
 
-
+//Array
 const itemArr  = [];
 const itemArr2 = [];
-	
+
+//localStorage
 (function(){
 	if(localStorage.getItem('myTaskList')){
 		lsArr.forEach(function(item, index){
 			itemArr.push(lsArr[index]);
-			itemList.innerHTML = localStorage.getItem('myTaskList');
-			
 		});
 
-		itemList.addEventListener('click', buttonsItem);
+		for (var i = 0; i < lsArr.length; i++){
+			const li = document.createElement('li');
+			const h5 = document.createElement('label');
+			const date = document.createElement('label');
+			const divButtons = document.createElement('div');
+			const fasCheck = document.createElement('i');
+			const fasDltBtn = document.createElement('i');
+
+			//assign classes
+			li.classList.add('item', 'd-flex');
+			li.id = lsArr[i].id;
+			h5.classList.add('item-name');
+			date.id = 'date';
+			divButtons.classList.add('item-buttons');
+			fasCheck.classList.add('fas', 'fa-check', 'complete');
+			fasDltBtn.classList.add('fas', 'fa-trash', 'delete');
+
+			//assing children
+			itemList.appendChild(li);
+			li.appendChild(h5);
+			li.appendChild(date);
+			li.appendChild(divButtons);
+			divButtons.appendChild(fasCheck);
+			divButtons.appendChild(fasDltBtn);
+
+			h5.innerText   = lsArr[i].text;
+			date.innerText = lsArr[i].date;
+
+			const items = itemList.querySelectorAll('.item');
+
+			items.forEach(function(item){
+				if(item.id === lsArr[i].id) {
+					item.querySelector('.complete').addEventListener('click', function(){
+						item.querySelector('.item-name').classList.toggle('fill');
+						item.querySelector('#date').classList.toggle('fill');
+					});
+
+					item.querySelector('.delete').addEventListener('click', function(){
+						this.closest('li').remove();
+						lsArr[i] = lsArr.filter(function(item){
+							lsArr.splice(0, item);
+						});
+					});
+				}
+			});
+		}
 	}
 })();
-
-	/*var todos;
-	function toLocal(param) {
-		todos = itemList.innerHTML;
-		localStorage.setItem('todos', todos);
-	}
-
-	if(localStorage.getItem('todos')) {
-		itemmList.innerHTML = localStorage.getItem('todos');
-	}*/
 
 itemForm.addEventListener('submit', function(event){
 	event.preventDefault();
@@ -46,9 +80,6 @@ itemForm.addEventListener('submit', function(event){
 		date: dateValue,
 		id: Math.random().toString(36).slice(2)
 	};
-
-
-
 	//--------------------
 
 	if (textValue === '') {
@@ -68,21 +99,18 @@ itemForm.addEventListener('submit', function(event){
 		itemArr.push(param);
 		buttonsItem(param);
 		localStorage.setItem('myTaskList',JSON.stringify(itemArr));
-
 	}
 });
-						//localStorage
 		
-
 //function for add list
-function addTodos(param) {
+function addTodos(param, index) {
 	//create elem
-	const li 	 = document.createElement('li');
-	const h5  	 = document.createElement('label');
-	const date       = document.createElement('label');
+	const li = document.createElement('li');
+	const h5 = document.createElement('label');
+	const date = document.createElement('label');
 	const divButtons = document.createElement('div');
-	const fasCheck 	 = document.createElement('i');
-	const fasDltBtn  = document.createElement('i');
+	const fasCheck = document.createElement('i');
+	const fasDltBtn = document.createElement('i');
 
 	//assing classes
 	li.classList.add('item', 'd-flex');
@@ -104,7 +132,6 @@ function addTodos(param) {
 	h5.innerText   = input.value;
 	date.innerText = inputDate.value;
 
-	//toLocal();
 	localStorage.setItem('myTaskList', JSON.stringify(itemArr));
 }
 
@@ -116,19 +143,15 @@ function buttonsItem(param) {
 			item.querySelector('.complete').addEventListener('click', function(){
 				item.querySelector('.item-name').classList.toggle('fill');
 				item.querySelector('#date').classList.toggle('fill');
-				//toLocal();
-					localStorage.setItem('myTaskList', JSON.stringify(itemArr));
-
+				localStorage.setItem('myTaskList', JSON.stringify(itemArr));
 			});
 
 			item.querySelector('.delete').addEventListener('click', function(){
-				itemList.removeChild(item);
+				this.closest('li').remove();
 				itemArr.filter(function(item){
 					return item !== param;
 				});
-				//toLocal();
-					localStorage.setItem('myTaskList', JSON.stringify(itemArr));
-
+				localStorage.setItem('myTaskList', JSON.stringify(itemArr));
 			});
 		}
 	});
@@ -136,8 +159,6 @@ function buttonsItem(param) {
 
 //Delete all list
 itemClear.addEventListener('click', function(){
-	//localStorage.removeItem('myTaskList');
-
 	if (itemArr.length > 0){
 		itemList.querySelectorAll('li').forEach(function(item){
 			itemList.removeChild(item);
@@ -147,7 +168,7 @@ itemClear.addEventListener('click', function(){
 }); 
 
 //function filter 
-document.getElementById('go').addEventListener('click', function(event){
+document.getElementById('search-input').addEventListener('keyup', function(event){
 	const text = event.target.value;
 	document.querySelectorAll('li').forEach(function(task){
 		const item = task.textContent;
@@ -180,12 +201,12 @@ function update(param){
 		myNode.removeChild(myNode.firstChild);
 	}
 	for (var i = 0; i < itemArr.length; i++){
-		const li 	 = document.createElement('li');
-		const h5  	 = document.createElement('label');
-		const date       = document.createElement('label');
+		const li = document.createElement('li');
+		const h5 = document.createElement('label');
+		const date = document.createElement('label');
 		const divButtons = document.createElement('div');
-		const fasCheck 	 = document.createElement('i');
-		const fasDltBtn  = document.createElement('i');
+		const fasCheck = document.createElement('i');
+		const fasDltBtn = document.createElement('i');
 
 		//assign classes
 		li.classList.add('item', 'd-flex');
@@ -218,7 +239,6 @@ function update(param){
 
 				item.querySelector('.delete').addEventListener('click', function(){
 					this.closest('li').remove();
-
 					itemArr[i] = itemArr.filter(function(item){
 						itemArr.splice(0, item);
 					});
@@ -258,12 +278,12 @@ function sortingCancel(param){
 		myNode.removeChild(myNode.firstChild);
 	}
 	for (var i = 0; i < itemArr.length; i++){
-		const li 	 = document.createElement('li');
-		const h5  	 = document.createElement('label');
-		const date       = document.createElement('label');
+		const li = document.createElement('li');
+		const h5 = document.createElement('label');
+		const date = document.createElement('label');
 		const divButtons = document.createElement('div');
-		const fasCheck 	 = document.createElement('i');
-		const fasDltBtn  = document.createElement('i');
+		const fasCheck = document.createElement('i');
+		const fasDltBtn = document.createElement('i');
 
 		//assing classes
 		li.classList.add('item', 'd-flex');
